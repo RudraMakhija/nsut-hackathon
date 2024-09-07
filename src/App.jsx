@@ -3,34 +3,42 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Landing from './components/Landing';
 import SmartAssistant from './pages/SmartAssistant';
 import AppointmentBooking from './pages/AppointmentBooking';
-import NotFound from './pages/NotFound'; 
+import PaymentPage from './pages/PaymentPage';
+import NotFound from './pages/NotFound';
 import SignInSignUp from './pages/SignInSignUp';
+import Dashboard from './pages/Dashboard';
+import Layout from './components/Layout'; // Import the Layout component
 
 import './App.css';
-
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Landing />,
-   
+    element: <Layout><Landing /></Layout>,
   },
   {
     path: "/smart-assistant",
-    element: <SmartAssistant />,
+    element: <Layout><SmartAssistant /></Layout>,
   },
   {
     path: "/appointment-booking",
-    element: <AppointmentBooking />,
+    element: <Layout><AppointmentBooking /></Layout>,
+  },
+  {
+    path: "/payment", 
+    element: <Layout><PaymentPage /></Layout>,
   },
   {
     path: "/sign-in",
-    element: <SignInSignUp/>
+    element: <Layout><SignInSignUp /></Layout>,
   },
-  
+  {
+    path: "/dashboard",
+    element: <Layout><Dashboard /></Layout>,
+  },
   {
     path: "*",
-    element: <NotFound />,
+    element: <Layout><NotFound /></Layout>,
   },
 ]);
 

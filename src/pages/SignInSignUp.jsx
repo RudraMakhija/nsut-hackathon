@@ -1,8 +1,47 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const SignInSignUp = () => {
   const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const navigate = useNavigate();
+
+  // Demo credentials
+  const demoUser = {
+    email: 'demo@example.com',
+    password: 'password123',
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Basic validation
+    if (isSignUp) {
+      if (password !== confirmPassword) {
+        alert('Passwords do not match!');
+        return;
+      }
+
+      // Store new user credentials in local storage
+      localStorage.setItem('user', JSON.stringify({ email, password }));
+      alert('Sign up successful!');
+      navigate('/dashboard');
+    } else {
+      // Retrieve user credentials from local storage
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+
+      if (email === demoUser.email && password === demoUser.password) {
+        navigate('/dashboard');
+      } else if (storedUser && email === storedUser.email && password === storedUser.password) {
+        navigate('/dashboard');
+      } else {
+        alert('Invalid credentials. Please use the demo credentials or sign up.');
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-10">
@@ -28,12 +67,14 @@ const SignInSignUp = () => {
         </div>
 
         {/* Sign In / Sign Up Form */}
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email" className="block text-gray-700">Email</label>
             <input
               type="email"
               id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md"
               placeholder="Enter your email"
               required
@@ -45,6 +86,8 @@ const SignInSignUp = () => {
             <input
               type="password"
               id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md"
               placeholder="Enter your password"
               required
@@ -57,6 +100,8 @@ const SignInSignUp = () => {
               <input
                 type="password"
                 id="confirm-password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Confirm your password"
                 required
@@ -74,13 +119,12 @@ const SignInSignUp = () => {
 
         <p className="text-center text-gray-600 mt-4">
           {isSignUp ? 'Already have an account?' : 'Don’t have an account?'}
-          <Link
-            to={isSignUp ? "/sign-in" : "/sign-up"}
-            className="text-blue-500 ml-1 font-semibold"
+          <button
             onClick={() => setIsSignUp(!isSignUp)}
+            className="text-blue-500 ml-1 font-semibold"
           >
             {isSignUp ? 'Sign In' : 'Sign Up'}
-          </Link>
+          </button>
         </p>
       </div>
     </div>
